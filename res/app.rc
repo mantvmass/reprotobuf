@@ -1,37 +1,56 @@
-#include <windows.h>
-#include "../src/version.h"
+#include <Windows.h>
+#include "version.h"
 
-101 ICON "app.ico"
+// ตรวจสอบว่าค่าการกำหนดเวอร์ชันถูกกำหนดหรือไม่ หากไม่ได้กำหนด จะตั้งค่าเริ่มต้นไว้เพื่อป้องกันข้อผิดพลาด
+#ifndef APP_VER_MAJOR
+    #define APP_VER_MAJOR 0 // หมายเลขรุ่นหลักของโปรแกรม (major version)
+#endif
+
+#ifndef APP_VER_MINOR
+    #define APP_VER_MINOR 1 // หมายเลขรุ่นย่อยของโปรแกรม (minor version)
+#endif
+
+#ifndef APP_VER_PATCH
+    #define APP_VER_PATCH 0 // หมายเลขรุ่นการแก้ไขโปรแกรม (patch version)
+#endif
+
+#ifndef APP_VER_BUILD
+    #define APP_VER_BUILD 0 // เลขรุ่นการสร้างไฟล์ (build number)
+#endif
+
+101 ICON "app.ico"  // ระบุไฟล์ไอคอนของโปรแกรม
 
 VS_VERSION_INFO VERSIONINFO
-  FILEVERSION APP_VER_MAJOR,APP_VER_MINOR,APP_VER_PATCH,0
-  PRODUCTVERSION APP_VER_MAJOR,APP_VER_MINOR,APP_VER_PATCH,0
-  FILEFLAGSMASK 0x3fL
+FILEVERSION APP_VER_MAJOR,APP_VER_MINOR,APP_VER_PATCH,APP_VER_BUILD
+PRODUCTVERSION APP_VER_MAJOR,APP_VER_MINOR,APP_VER_PATCH,APP_VER_BUILD
+FILEFLAGSMASK 0x3FL
+
 #ifdef _DEBUG
-  FILEFLAGS VS_FF_DEBUG
+    FILEFLAGS VS_FF_DEBUG // ตั้งค่าแฟล็กเป็นโหมดดีบั๊กหากกำลังคอมไพล์ในโหมด Debug
 #else
-  FILEFLAGS 0x0L
+    FILEFLAGS 0x0L // ถ้าเป็นโหมด Release จะไม่ตั้งค่าแฟล็กใด ๆ
 #endif
-  FILEOS VOS__WINDOWS32
-  FILETYPE VFT_APP
-  FILESUBTYPE 0x0L
-  BEGIN
+
+FILEOS VOS__WINDOWS32 // ระบุว่าโปรแกรมนี้สร้างสำหรับระบบปฏิบัติการ Windows 32 บิต
+FILETYPE VFT_APP      // ประเภทไฟล์เป็นแอปพลิเคชัน
+FILESUBTYPE 0x0L      // ไม่ได้ระบุชนิดย่อยของไฟล์
+BEGIN
     BLOCK "StringFileInfo"
     BEGIN
-      BLOCK "000004b0"
-      BEGIN
-        VALUE "CompanyName",      APP_SITE
-        VALUE "FileDescription",  APP_DESC
-        VALUE "FileVersion",      APP_VERSION
-        VALUE "LegalCopyright",   APP_COPYRIGHT
-        VALUE "OriginalFilename", "reprotobuf.exe"
-        VALUE "ProductName",      APP_NAME
-        VALUE "ProductVersion",   APP_VERSION
-      END
+        BLOCK "040904B0" // รหัสภาษา U.S. English, Unicode code page
+        BEGIN
+            VALUE "CompanyName",      APP_SITE          // ระบุเว็บไซต์หรือที่อยู่ของบริษัท
+            VALUE "FileDescription",  APP_DESC          // คำอธิบายเกี่ยวกับไฟล์โปรแกรม
+            VALUE "FileVersion",      APP_VERSION       // เวอร์ชันของไฟล์
+            VALUE "InternalName",     APP_ID            // ชื่อภายในของแอปพลิเคชัน
+            VALUE "LegalCopyright",   APP_COPYRIGHT     // ข้อความลิขสิทธิ์
+            VALUE "OriginalFilename", "reprotobuf.exe"  // ชื่อไฟล์ต้นฉบับของโปรแกรม
+            VALUE "ProductName",      APP_NAME          // ชื่อโปรแกรม
+            VALUE "ProductVersion",   APP_VERSION       // เวอร์ชันของโปรแกรม
+        END
     END
     BLOCK "VarFileInfo"
     BEGIN
-      VALUE "Translation", 0x0, 1200
+        VALUE "Translation", 0x409, 1200 // ระบุรหัสภาษา (U.S. English) และ Unicode
     END
-  END
-
+END
